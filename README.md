@@ -17,4 +17,6 @@ TECHNOLOGIES USED:
 server.js, node, LOCAL PORT 3000, styles.css, db.json, npm, notes api, html, github
 
 ----
+PREVIEW OF FUNCTIONING APP:
+![Screenshot (14)](https://user-images.githubusercontent.com/58044346/74390749-6feb3800-4dbf-11ea-9e8a-9911c3dbe076.png)
 
