@@ -1,50 +1,29 @@
-const path = require("path");
-const fs = require("fs");
-const uuidv4 = require('uuid/v4');
+var noteData = require("../db/db.json");
 
+module.exports = function (app) {
 
-module.exports = function(app) {
-
-    // Need to determine what req.body will look like
-    app.post("/api/notes", function(req, res) {
-        let file = path.join(__dirname , "../db/db.json");
-        const notesArr = require(file);
-        let note = req.body;
-        note.id = uuidv4();
-        let notes = [];
-        if (Object.keys(notesArr).length !== 0) {
-            notes = notesArr.slice();
-        };
-        notes.push(note);
-        // Await functionality?
-        fs.writeFile(file, JSON.stringify(notes, null, 2), err => {
-            if (err) throw err;
-        });
-        res.send(note);
+    app.get("/api/notes", function (req, res) {
+        res.json(noteData);
     });
-    app.get("/api/notes", function(req, res) {
-        let notesArr = require("../db/db.json");
-        res.json(notesArr);
+
+    app.get("/api/notes/:note", function (req, res) {
+        var chosen = req.params.note;
+        noteData(chosen)
+        res.json(true);
     });
-    app.delete("/api/notes/:id", function(req, res) {
-        let file = path.join(__dirname , "../db/db.json");
-        const notesArr = require(file);
-        let notes = notesArr.slice()
-        let deleteNoteId = req.params.id;
-        for (let i = 0; i < notes.length; i++) {
-            if (notes[i].id === deleteNoteId) {
-                notes.splice(i, 1);
-                break;
-            };
-        };
-        // Await functionality?
-        fs.writeFile(file, JSON.stringify(notes, null, 2), err => {
-            if (err) throw err;
-            res.send(notes);
-        });
+
+    app.post("/api/notes", function (req, res) {
+        noteData.push(req.body);
+        res.json(true);
+    });
+
+    app.delete("/api/notes/:note", function (req, res) {
+        var chosen = req.params.note;
+        noteData.pop(chosen);
+        res.json(true)
     })
 
 
 
 
-}
+};
